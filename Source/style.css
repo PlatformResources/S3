@@ -2,7 +2,7 @@
 .bgimage {
     height:100%;
     width: 100%;
-    background: url('Platform web/img.jpg');
+    background: url('https://github.com/PlatformResources/S3/blob/main/Source/platformhomepage.png');
     background-size:cover;
     position:relative;
     text-align: center;
