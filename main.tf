@@ -5,14 +5,15 @@ provider "aws" {
 }
 
 resource "aws_s3_bucket" "example" {
-  bucket = "platform-resources-perficient"
+  bucket = "platform-resources-perficient-folks"
 }
 
 resource "aws_s3_object" "object" {
   bucket = aws_s3_bucket.example.id
   key    = "index.html"
   source = "./index.html"
-  acl = "public-read-write"
+  acl = "public-read"
+  content_type = "text/html"
 depends_on = [
     aws_s3_bucket_acl.example,
     ]
@@ -28,6 +29,7 @@ resource "aws_s3_bucket_website_configuration" "example" {
 
 resource "aws_s3_bucket_ownership_controls" "example" {
   bucket = aws_s3_bucket.example.id
+
   rule {
     object_ownership = "BucketOwnerPreferred"
   }
@@ -49,7 +51,7 @@ resource "aws_s3_bucket_acl" "example" {
   ]
 
   bucket = aws_s3_bucket.example.id
-  acl    = "public-read"
+  acl    = "private"
 }
 
 /*
