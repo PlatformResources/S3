@@ -1,10 +1,21 @@
-resource "aws_s3_bucket" "example" {
-  bucket = "platform-team-staticwebsite"
+provider "aws" {
+  region     = "us-east-1"
+  access_key = "AKIAQGCBLPXLHJGCLHPD"
+  secret_key = "LwfJnJBIFZKQs9rRAKTfwRJYM+tnhCu5G0mf8+iU"
+}
 
-  tags = {
-    Name        = "TestBucket"
-    Environment = "POC"
-  }
+resource "aws_s3_bucket" "example" {
+  bucket = "platform-resources-perficient"
+}
+
+resource "aws_s3_object" "object" {
+  bucket = aws_s3_bucket.example.id
+  key    = "index.html"
+  source = "./index.html"
+  acl = "public-read-write"
+depends_on = [
+    aws_s3_bucket_acl.example,
+    ]
 }
 
 resource "aws_s3_bucket_website_configuration" "example" {
@@ -13,29 +24,49 @@ resource "aws_s3_bucket_website_configuration" "example" {
   index_document {
     suffix = "index.html"
   }
+}
 
-  error_document {
-    key = "error.html"
-  }
-
-  routing_rule {
-    condition {
-      key_prefix_equals = "docs/"
-    }
-    redirect {
-      replace_key_prefix_with = "documents/"
-    }
+resource "aws_s3_bucket_ownership_controls" "example" {
+  bucket = aws_s3_bucket.example.id
+  rule {
+    object_ownership = "BucketOwnerPreferred"
   }
 }
 
-resource "aws_s3_object" "index_html" {
+resource "aws_s3_bucket_public_access_block" "example" {
   bucket = aws_s3_bucket.example.id
-  key    = "index.html"
-  source = "./index.html"
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
 }
 
-resource "aws_s3_object" "error_html" {
+resource "aws_s3_bucket_acl" "example" {
+  depends_on = [
+    aws_s3_bucket_ownership_controls.example,
+    aws_s3_bucket_public_access_block.example,
+  ]
+
   bucket = aws_s3_bucket.example.id
-  key    = "error.html"
-  source = "./error.html"
+  acl    = "public-read"
 }
+
+/*
+resource "aws_s3_bucket_policy" "example" {
+  bucket = aws_s3_bucket.static_website.id
+
+  policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Action = ["s3:GetObject"],
+        Effect = "Allow",
+        Principal = "*",
+        Resource = "${aws_s3_bucket.static_website.arn}",
+      },
+    ],
+  })
+}
+
+*/
