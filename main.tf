@@ -54,6 +54,15 @@ resource "aws_s3_bucket_acl" "example" {
   acl    = "private"
 }
 
+output "website_domain" {
+  value = aws_s3_bucket_website_configuration.example.website_domain
+}
+
+output "website_endpoint" {
+  value = aws_s3_bucket_website_configuration.example.website_endpoint
+}
+
+
 /*
 resource "aws_s3_bucket_policy" "example" {
   bucket = aws_s3_bucket.static_website.id
