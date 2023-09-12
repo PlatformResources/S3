@@ -1,8 +1,6 @@
 provider "aws" {
   region     = "us-east-1"
-  access_key = "AKIAQGCBLPXLHJGCLHPD"
-  secret_key = "LwfJnJBIFZKQs9rRAKTfwRJYM+tnhCu5G0mf8+iU"
-}
+ }
 
 resource "aws_s3_bucket" "example" {
   bucket = "platform-resources-perficient-folks"
