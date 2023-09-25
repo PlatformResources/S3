@@ -10,6 +10,29 @@ resource "aws_s3_bucket" "example" {
 
 resource "aws_s3_object" "object" {
   bucket = aws_s3_bucket.example.id
+  key    = "script.js"
+  source = "./script.js"
+  acl = "public-read"
+  content_type = "text/html"
+depends_on = [
+    aws_s3_bucket_acl.example,
+    ]
+}
+
+
+resource "aws_s3_object" "object1" {
+  bucket = aws_s3_bucket.example.id
+  key    = "styles.css"
+  source = "./styles.css"
+  acl = "public-read"
+  content_type = "text/html"
+depends_on = [
+    aws_s3_bucket_acl.example,
+    ]
+}
+
+resource "aws_s3_object" "object2" {
+  bucket = aws_s3_bucket.example.id
   key    = "index.html"
   source = "./index.html"
   acl = "public-read"
@@ -18,6 +41,7 @@ depends_on = [
     aws_s3_bucket_acl.example,
     ]
 }
+
 
 resource "aws_s3_bucket_website_configuration" "example" {
   bucket = aws_s3_bucket.example.id
