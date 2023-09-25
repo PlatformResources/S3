@@ -1,6 +1,8 @@
 provider "aws" {
   region     = "us-east-1"
- }
+  access_key = "my-access-key"
+  secret_key = "my-secret-key"
+}
 
 resource "aws_s3_bucket" "example" {
   bucket = "platform-resources-perficient-folks"
